@@ -1,0 +1,284 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <title>蘇州盃計時器</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="manifest" href="/manifest.json">
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        $(function() {
+            $('#top').click(function() {
+                $('html,body').animate({
+                    scrollTop: '0px'
+                }, 800);
+            });
+
+            $('#ct').click(function() {
+                $('html,body').animate({
+                    scrollTop: $('#middle').offset().top
+                }, 800);
+            });
+
+            $('#ft').click(function() {
+                $('html,body').animate({
+                    scrollTop: $('#disconnect').offset().top
+                }, 800);
+            });
+        });
+
+    </script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
+        }
+
+    </script>
+</head>
+
+<body>
+    <audio id="bell" src="audio/bell2.mp3"></audio>
+    <!-- 滑動選單 str -->
+    <div id="roll">
+        <div title="置頂" id="top">主計時</div>
+        <div title="中場休息" id="ct">中場休息</div>
+        <div title="置底" id="ft">斷線計時</div>
+    </div>
+    <!-- 滑動選單 end -->
+
+    <!-- Main -->
+    <section id="main">
+        <div class="inner">
+            <!-- One -->
+            <section id="one" class="wrapper style1">
+                <header class="special">
+                    <font style="font-size: 60px;">比賽時間</font>
+                    <p style="font-size: 120px;" id="maintime">4:30:00</p>
+                    <button onclick="start('maintime')"><img src="images/play.png"></button>
+                    <button onclick="pause('maintime')"><img src="images/pause.png" width="50px"></button>
+                    <button onclick="reset('maintime')"><img src="images/restart.png"></button>
+                    <button onclick="bellplay()"><img src="images/bell.png" width="50px"></button>
+                </header>
+                <div class="content">
+
+                </div>
+            </section>
+        </div>
+
+    </section>
+
+    <section id="middle">
+        <div class="inner">
+            <!-- two -->
+            <section id="two" class="wrapper style1">
+                <header class="special">
+                    <font style="font-size: 60px;">中場休息</font>
+                    <p style="font-size: 120px;" id="middlebreak">3:00:00</p>
+                    <button onclick="start('middlebreak')"><img src="images/play.png"></button>
+                    <button onclick="pause('middlebreak')"><img src="images/pause.png" width="50px"></button>
+                    <button onclick="reset('middlebreak')"><img src="images/restart.png"></button>
+                    <button onclick="bellplay()"><img src="images/bell.png" width="50px"></button>
+                </header>
+                <div class="content">
+
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <section id="disconnect">
+        <div class="inner">
+            <!-- two -->
+            <section id="two" class="wrapper style1">
+                <header class="special">
+                    <font style="font-size: 60px;">斷線計時</font>
+                    <p style="font-size: 120px;" id="disconnecttimer">5:00:00</p>
+                    <button onclick="start('disconnecttimer')"><img src="images/play.png"></button>
+                    <button onclick="pause('disconnecttimer')"><img src="images/pause.png" width="50px"></button>
+                    <button onclick="reset('disconnecttimer')"><img src="images/restart.png"></button>
+                    <button onclick="bellplay()"><img src="images/bell.png" width="50px"></button>
+                </header>
+                <div class="content">
+
+                </div>
+            </section>
+        </div>
+    </section>
+
+
+
+    <!-- Footer -->
+    <footer id="footer">
+        <div class="copyright">
+            By 劉岳軒
+        </div>
+    </footer>
+    <script>
+        document.getElementById('middle').style.height = window.screen.availHeight + 'px';
+
+        var ok = 1;
+        var timer;
+        var audio = document.getElementById("bell");
+        var pageTimer = {
+            maintime: {
+                min: 4,
+                sec: 30,
+                mile: 0
+            },
+            middlebreak: {
+                min: 3,
+                sec: 0,
+                mile: 0
+            },
+            disconnecttimer: {
+                min: 5,
+                sec: 0,
+                mile: 0
+            }
+        };
+
+        function start(page) {
+            this.id = page;
+            this.myVar = pageTimer[this.id];
+
+            if (ok == 1) {
+                ok = 0;
+                timer = setInterval(() => {
+                    myTimer();
+                }, 10);
+
+            }
+        }
+
+        function myTimer() {
+            this.myVar = pageTimer[this.id];
+            this.myVar.mile -= 1;
+
+            if (this.myVar.min <= 0 && this.myVar.sec <= 0 && this.myVar.mile <= 0) {
+                clearInterval(timer);
+                init(this.id)
+                ok = 1;
+                if (this.id == 'maintime')
+                    document.getElementById(this.id).innerHTML = this.myVar.min + ":" + this.myVar.sec + ":0" + this.myVar.mile;
+                else
+                    document.getElementById(this.id).innerHTML = this.myVar.min + ":0" + this.myVar.sec + ":0" + this.myVar.mile;
+                ok = 1;
+                return false;
+            }
+            if (this.myVar.mile < 0) {
+                this.myVar.sec -= 1;
+                this.myVar.mile = 99;
+
+            }
+            if (this.myVar.sec < 0) {
+                this.myVar.min -= 1;
+                this.myVar.sec = 59
+            }
+
+            if (this.myVar.sec < 10) {
+                if (this.myVar.mile < 10)
+                    document.getElementById(this.id).innerHTML = this.myVar.min + ":0" + this.myVar.sec + ":0" + this.myVar.mile;
+                else
+                    document.getElementById(this.id).innerHTML = this.myVar.min + ":0" + this.myVar.sec + ":" + this.myVar.mile;
+            } else if (this.myVar.mile < 10)
+                document.getElementById(this.id).innerHTML = this.myVar.min + ":" + this.myVar.sec + ":0" + this.myVar.mile;
+            else
+                document.getElementById(this.id).innerHTML = this.myVar.min + ":" + this.myVar.sec + ":" + this.myVar.mile;
+
+            if (this.myVar.min == 1 && this.myVar.sec == 0 && this.myVar.mile == 0)
+                audio.play();
+            else if (this.myVar.min == 0 && this.myVar.sec == 30 && this.myVar.mile == 0) {
+                var index = 0;
+                audio.play();
+                setInterval(function() {
+                    if (index < 1) {
+                        audio.play();
+                        index++;
+                    }
+                }, 1000);
+            }
+        }
+
+
+        function reset(page) {
+            if (page != this.id) {
+                init(page);
+                temp = pageTimer[page];
+                if (page == 'maintime')
+                    document.getElementById(page).innerHTML = temp.min + ":" + temp.sec + ":0" + temp.mile;
+                else
+                    document.getElementById(page).innerHTML = temp.min + ":0" + temp.sec + ":0" + temp.mile;
+            } else {
+                init(page);
+                this.myVar = pageTimer[page];
+                clearInterval(timer);
+                if (page == 'maintime')
+                    document.getElementById(page).innerHTML = this.myVar.min + ":" + this.myVar.sec + ":0" + this.myVar.mile;
+                else
+                    document.getElementById(page).innerHTML = this.myVar.min + ":0" + this.myVar.sec + ":0" + this.myVar.mile;
+                ok = 1;
+            }
+        }
+
+        function pause(page) {
+            if (page == this.id) {
+                clearInterval(timer);
+                ok = 1;
+            }
+
+        }
+
+        function bellplay() {
+            audio.play();
+        }
+
+        function init(page) {
+            temp = pageTimer[page];
+            if (page == 'maintime') {
+                temp.min = 4;
+                temp.sec = 30;
+                temp.mile = 0;
+            } else if (page == 'middlebreak') {
+                temp.min = 3;
+                temp.sec = 0;
+                temp.mile = 0;
+            } else {
+                temp.min = 5;
+                temp.sec = 0;
+                temp.mile = 0;
+            }
+        }
+
+    </script>
+
+    <style>
+        /** 滑動選單 **/
+        #top,
+        #ft,
+        #ct {
+            position: relative;
+            cursor: pointer;
+            height: 10px;
+            padding-bottom: 110px;
+            width: 25px;
+        }
+
+
+        #roll {
+            display: block;
+            width: 25px;
+            margin-right: -520px;
+            position: fixed;
+            right: 50%;
+            top: 50%;
+        }
+
+    </style>
+
+    <script></script>
+</body>
+
+</html>

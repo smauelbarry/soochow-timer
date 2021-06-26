@@ -1,0 +1,23 @@
+{
+  "name": "soochow timer",
+  "short_name": "soochow timer",
+  "description": "蘇州盃計時器",
+  "start_url": "http://192.168.212.36:8887/",
+  "display": "standalone",
+  "background_color": "#FAFAFA",
+  "theme_color": "#00A7E5",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/images/192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/images/512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ]
+}
