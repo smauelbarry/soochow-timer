@@ -2,7 +2,7 @@
   "name": "soochow timer",
   "short_name": "soochow timer",
   "description": "蘇州盃計時器",
-  "start_url": "http://192.168.212.36:8887/",
+  "start_url": "https://smauelbarry.github.io/soochow-timer/",
   "display": "standalone",
   "background_color": "#FAFAFA",
   "theme_color": "#00A7E5",
