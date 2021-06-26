@@ -30,10 +30,10 @@
         });
 
     </script>
-
+    <script src="sw.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js');
+            navigator.serviceWorker.register('sw.js');
         }
 
     </script>
@@ -277,7 +277,7 @@
         }
 
     </style>
-
+    <script src="service-worker.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
             console.log("Will service worker register?");
