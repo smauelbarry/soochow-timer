@@ -1,5 +1,5 @@
-var preCacheFile = 'pre-v1.0.0'; // 存在 Cache Storage 的資料夾名，預存用
-var autoCacheFile = 'letswrite-v1.0.0'; // 存在 Cache Storage 的資料夾名稱，自動存用
+var preCacheFile = ''; // 存在 Cache Storage 的資料夾名，預存用
+var autoCacheFile = ''; // 存在 Cache Storage 的資料夾名稱，自動存用
 
 // 一定要存下的檔案清單
 // 比如 404.html、logo.svg，不會自動出現在每頁的 request 上，但當使用者是 offline 時又必要會看到的
