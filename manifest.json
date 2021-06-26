@@ -2,7 +2,7 @@
   "name": "蘇州盃計時器",
   "short_name": "蘇州盃計時器",
   "description": "蘇州盃計時器",
-  "start_url": "https://smauelbarry.github.io/soochow-timer/",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#FAFAFA",
   "theme_color": "#00A7E5",
