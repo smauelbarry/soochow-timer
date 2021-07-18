@@ -211,17 +211,29 @@ body {
         padding-left: 150px;
     }
     
+    .divfloatleft p{
+        font-size: 120px;
+    }
+    
     .divfloatright{
         float: right; 
         padding-right: 150px;
     }
+    
+    .divfloatright p{
+        font-size: 120px;
+    }
 
     .move {
+        transform: translate(0px, 1500px);
+    }
+    
+    .movemain{
         transform: translate(0px, 750px);
     }
     
     .movebottom {
-        transform: translate(0px, 1420px);
+        transform: translate(0px, 2150px);
     }
 
 }
@@ -252,20 +264,32 @@ body {
     
     .divfloatleft{
         float: left; 
-        padding-left: 50px;
+        padding-left: 40px;
+    }
+    
+    .divfloatleft p{
+        font-size: 100px;
     }
     
     .divfloatright{
         float: right; 
-        padding-right: 50px;
+        padding-right: 90px;
+    }
+    
+    .divfloatright p{
+        font-size: 100px;
     }
 
     .move {
-        transform: translate(0px, 600px);
+        transform: translate(0px, 1350px);
+    }
+    
+    .movemain{
+        transform: translate(0px, 650px);
     }
     
     .movebottom {
-        transform: translate(0px, 1350px);
+        transform: translate(0px, 2000px);
     }
 }
 
@@ -295,20 +319,24 @@ body {
     
     .divfloatleft{
         float: left; 
-        padding-left: 0px;
+        padding-left: 20px;
     }
     
     .divfloatright{
         float: right; 
-        padding-right: 0px;
+        padding-right: 90px;
     }
     
     .move {
-        transform: translate(0px, 600px);
+        transform: translate(0px, 1400px);
+    }
+    
+    .movemain{
+        transform: translate(0px, 700px);
     }
     
     .movebottom {
-        transform: translate(0px, 1350px);
+        transform: translate(0px, 2050px);
     }
 
 }

@@ -1,25 +1,24 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE HTML>
+<html>
+
 <head>
-  <meta charset="utf-8">
-  <title>蘇州盃計時器</title>
-  <link rel="manifest" href="/manifest.json">
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="icon" href="favicon.ico" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="images/icon-152.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="white"/>
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Hello World">
-  <meta name="msapplication-TileImage" content="images/hello-icon-144.png">
-  <meta name="msapplication-TileColor" content="#FFFFFF">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>蘇州盃計時器</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="images/icon.png" type="image/x-icon" / >
+    <link rel="stylesheet" href="assets/css/main.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(function() {
             $('#top').click(function() {
                 $('html,body').animate({
                     scrollTop: '0px'
+                }, 800);
+            });
+            
+            $('#second').click(function() {
+                $('html,body').animate({
+                    scrollTop: $('#main').offset().top
                 }, 800);
             });
 
@@ -37,22 +36,44 @@
         });
     </script>
 </head>
-<body class="fullscreen">
-  <audio id="bell" src="audio/bell2.mp3"></audio>
+
+<body>
+    <audio id="bell" src="audio/bell2.mp3"></audio>
     <!-- 滑動選單 str -->
     <div id="roll">
-        <div title="置頂" id="top">主計時</div>
+        <div title="緩衝" id="top">緩衝時間</div>
+        <div title="主計時" id="second">主計時</div>
         <div title="中場休息" id="ct">中場休息</div>
-        <div title="置底" id="ft">斷線計時</div>
+        <div title="斷線計時" id="ft">斷線計時</div>
     </div>
     <!-- 滑動選單 end -->
     <!-- Main -->
-    <section id="main">
+    <section id="buffer">
         <div class="inner">
             <!-- One -->
             <section id="one" class="wrapper style1">
                 <header class="special">
                     <img class="titleImg" src="images/soochowtitle.gif" width="200px;" style="transition: transform 2s;"><br>
+                    <font style="font-size: 60px;">緩衝時間</font>
+                    <p style="font-size: 120px;" id="buffertime">0:45:00</p>
+                    <button onclick="start('buffertime')"><img src="images/play.png"></button>
+                    <button onclick="pause('buffertime')"><img src="images/pause.png" width="50px"></button>
+                    <button onclick="reset('buffertime')"><img src="images/restart.png"></button>
+                    <button onclick="bellplay()"><img src="images/bell.png" width="50px"></button>
+                </header>
+                <div class="content">
+
+                </div>
+            </section>
+        </div>
+
+    </section>
+    
+    <section id="main" style="padding-top: 200px;">
+        <div class="inner">
+            <!-- One -->
+            <section id="one" class="wrapper style1">
+                <header class="special">
                     <font style="font-size: 60px;">比賽時間</font>
                     <p style="font-size: 120px;" id="maintime">4:30:00</p>
                     <button onclick="start('maintime')"><img src="images/play.png"></button>
@@ -97,7 +118,7 @@
                 </header>
 
                 <div class="divfloatleft">
-                    <p style="font-size: 120px;" id="disconnecttimer">5:00:00</p>
+                    <p id="disconnecttimer">5:00:00</p>
                     <button onclick="start('disconnecttimer')"><img src="images/play.png"></button>
                     <button onclick="pause('disconnecttimer')"><img src="images/pause.png" width="50px"></button>
                     <button onclick="reset('disconnecttimer')"><img src="images/restart.png"></button>
@@ -105,7 +126,7 @@
                 </div>
 
                 <div class="divfloatright">
-                    <p style="font-size: 120px;" id="right">5:00:00</p>
+                    <p id="right">5:00:00</p>
                     <button onclick="rstart()"><img src="images/play.png"></button>
                     <button onclick="rpause()"><img src="images/pause.png" width="50px"></button>
                     <button onclick="rreset()"><img src="images/restart.png"></button>
@@ -135,6 +156,11 @@
         var timer;
         var audio = document.getElementById("bell");
         var pageTimer = {
+            buffertime:{
+                min: 0,
+                sec: 45,
+                mile: 0
+            },
             maintime: {
                 min: 4,
                 sec: 30,
@@ -175,9 +201,20 @@
                 ok = 1;
                 if (this.id == 'maintime')
                     document.getElementById(this.id).innerHTML = this.myVar.min + ":" + this.myVar.sec + ":0" + this.myVar.mile;
+                else if(this.id == 'buffertime')
+                    document.getElementById(this.id).innerHTML = this.myVar.min + ":" + this.myVar.sec + ":0" + this.myVar.mile;
                 else
                     document.getElementById(this.id).innerHTML = this.myVar.min + ":0" + this.myVar.sec + ":0" + this.myVar.mile;
-                ok = 1;
+                
+                var index = 0;
+                audio.play();
+                setInterval(function() {
+                    if (index < 2) {
+                        audio.play();
+                        index++;
+                    }
+                }, 1000);
+                
                 return false;
             }
             if (this.myVar.mile < 0) {
@@ -219,7 +256,7 @@
             if (page != this.id) {
                 init(page);
                 temp = pageTimer[page];
-                if (page == 'maintime')
+                if (page == 'maintime' || page == 'buffertime')
                     document.getElementById(page).innerHTML = temp.min + ":" + temp.sec + ":0" + temp.mile;
                 else
                     document.getElementById(page).innerHTML = temp.min + ":0" + temp.sec + ":0" + temp.mile;
@@ -227,7 +264,7 @@
                 init(page);
                 this.myVar = pageTimer[page];
                 clearInterval(timer);
-                if (page == 'maintime')
+                if (page == 'maintime' || page == 'buffertime')
                     document.getElementById(page).innerHTML = this.myVar.min + ":" + this.myVar.sec + ":0" + this.myVar.mile;
                 else
                     document.getElementById(page).innerHTML = this.myVar.min + ":0" + this.myVar.sec + ":0" + this.myVar.mile;
@@ -249,7 +286,12 @@
 
         function init(page) {
             temp = pageTimer[page];
-            if (page == 'maintime') {
+            if (page == 'buffertime'){
+                temp.min = 0;
+                temp.sec = 45;
+                temp.mile = 0;
+            }
+            else if (page == 'maintime') {
                 temp.min = 4;
                 temp.sec = 30;
                 temp.mile = 0;
@@ -268,13 +310,25 @@
 
         window.onscroll = function() {
             const moveToNextAt = (titleImg.offsetTop) + (titleImg.clientHeight / 2);
+            
             if(window.scrollY >= $('#disconnect').offset().top-600){
+                titleImg.classList.remove('movemain');
+                titleImg.classList.remove('move');
                 titleImg.classList.add('movebottom');
             }
             else if (window.scrollY >= $('#middle').offset().top-600) {
                 titleImg.classList.remove('movebottom');
+                titleImg.classList.remove('movemain');
                 titleImg.classList.add('move');
-            } else {
+            }
+            else if(window.scrollY >= $('#main').offset().top-600){
+                titleImg.classList.remove('movebottom');
+                titleImg.classList.remove('move');
+                titleImg.classList.add('movemain');
+            }
+            else {
+                titleImg.classList.remove('movebottom');
+                titleImg.classList.remove('movemain');
                 titleImg.classList.remove('move');
             }
         }
@@ -283,6 +337,7 @@
     <style>
         /** 滑動選單 **/
         #top,
+        #second,
         #ft,
         #ct {
             position: relative;
@@ -296,12 +351,10 @@
         #roll {
             display: block;
             width: 25px;
-            margin-right: -520px;
+            
             position: fixed;
-            right: 40%;
-            top: 50%;
+            right: 5%;
+            top: 30%;
         }
     </style>
-  <script src="js/main.js"></script>
-</body>
-</html>
+</body></html>
